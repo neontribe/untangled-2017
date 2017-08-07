@@ -174,8 +174,8 @@ class Player():
                 self.cast_spells[1:]
             self.cast_spells.append(spell)
         elif action == Action.SWIPE:
-            for i in range(0,300):
-            	self.attack(Action.SPELL,(math.sin(i/10),math.cos(i/10)),position)
+            for i in range(0,15):
+            	self.attack(Action.SPELL,(math.sin(i),math.cos(i)),position)
             return
 
     def remove_spell(self,spell):
