@@ -218,7 +218,6 @@ class Spell():
         self.velo_x, self.velo_y = velocity
 
     def hit_target(self, target):
-        if self.rect.colliderect(target.rect):
             # TODO - decide on what to do with collision
             pass
 
