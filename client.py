@@ -30,7 +30,7 @@ width = 1024
 height = 1024
 
 font = 'assets/fonts/alterebro-pixel-font.ttf'
-level_tileset_path = 'assets/tilesets/main.png'
+level_tileset_path = 'assets/tilesets/fullHD.png'
 player_animation_tileset_path = 'assets/tilesets/player.png'
 
 class GameState(Enum):
@@ -169,7 +169,7 @@ class GameClient():
                     # Handle controller input by setting flags (move, neutral)
                     # and using timers (delay, pressed).
                     # Move if pressed timer is greater than delay.
-                    if(pygame.joystick.get_count() > 0 and me.name != "windowstester"):
+                    if(pygame.joystick.get_count() > 0):
                         joystick = pygame.joystick.Joystick(0)
                         move = False
                         delay = 100
