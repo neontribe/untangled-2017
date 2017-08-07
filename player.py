@@ -10,7 +10,6 @@ import client
 from tile import Tileset
 import map as map_module
 
-
 class Movement(Enum):
     UP = 1
     RIGHT = 2
@@ -84,6 +83,7 @@ class Player():
 
     def set_name(self, name, save = False):
         self.name = name
+        
         if save: self.save_to_config()
 
     def set_tileset(self, tileset):
@@ -135,17 +135,28 @@ class Player():
         tmp_x = self.x
         tmp_y = self.y
 
-        if direction == Movement.UP:
-            tmp_y -= self.step
-        elif direction == Movement.DOWN:
-            tmp_y += self.step
+        if self.name == "spannner":
+            if direction == Movement.UP:
+                tmp_y -= 2
+            elif direction == Movement.DOWN:
+                tmp_y += 2
 
-        if direction == Movement.RIGHT:
-            tmp_x += self.step
-        elif direction == Movement.LEFT:
-            tmp_x -= self.step
+            if direction == Movement.RIGHT:
+                tmp_x += 2
+            elif direction == Movement.LEFT:
+                tmp_x -= 2
+        else:
+            if direction == Movement.UP:
+                tmp_y -= self.step
+            elif direction == Movement.DOWN:
+                tmp_y += self.step
 
-        if not self.map.level.can_move_to(tmp_x, tmp_y):
+            if direction == Movement.RIGHT:
+                tmp_x += self.step
+            elif direction == Movement.LEFT:
+                tmp_x -= self.step
+
+        if not self.map.level.can_move_to(tmp_x, tmp_y,  self.name):
             return
 
         self.set_position(Position(tmp_x, tmp_y))
@@ -175,17 +186,11 @@ class Player():
             #TODO
             return
 
-    def remove_spell(self,spell):
-        self.cast_spells.remove(spell)
-        return
-
 class Spell():
-    def __init__(self, player, velocity, position=None, size=(0.25, 0.25), colour=(0,0,0), life=100):
+    def __init__(self, player, velocity, position=None, size=(0.25, 0.25), colour=(0,0,0)):
         self.player = player
         self.size = size
         self.colour = colour
-        self.life = life
-        self.maxLife = life
         if position == None:
             # spawn at player - additional maths centres the spell
             self.x = self.player.x + 0.5 - (size[0] / 2)
@@ -196,24 +201,12 @@ class Spell():
         self.set_velocity(velocity)
 
     def render(self):
-        self.colour = (random.randrange(255),random.randrange(255),random.randrange(255))
-        newSize = self.life/self.maxLife #random.randrange(100)/100
-        self.size = (newSize,newSize)
-        if(self.life <= 0):
-            self.player.remove_spell(self)
-
-        self.life -= 1
-
         pixel_pos = self.player.map.get_pixel_pos(self.x, self.y);
         pixel_size = (
             self.size[0] * map_module.TILE_PIX_WIDTH,
             self.size[1] * map_module.TILE_PIX_HEIGHT
         )
-        offset_pos = (
-            pixel_pos[0] - (pixel_size[0]/2),
-            pixel_pos[1] - (pixel_size[1]/2)
-        )
-        self.rect = pygame.draw.rect(self.player.screen, self.colour, Rect(offset_pos, pixel_size))
+        self.rect = pygame.draw.rect(self.player.screen, self.colour, Rect(pixel_pos, pixel_size))
 
         # move the projectile by its velocity
         self.x += self.velo_x
