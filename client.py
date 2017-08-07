@@ -30,7 +30,7 @@ width = 1024
 height = 1024
 
 font = 'assets/fonts/alterebro-pixel-font.ttf'
-level_tileset_path = 'assets/tilesets/main.png'
+level_tileset_path = 'assets/tilesets/fullHD.png'
 player_animation_tileset_path = 'assets/tilesets/player.png'
 
 class GameState(Enum):

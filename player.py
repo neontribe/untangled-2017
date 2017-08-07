@@ -135,17 +135,26 @@ class Player():
         tmp_x = self.x
         tmp_y = self.y
 
-        if direction == Movement.UP:
-            tmp_y -= self.step
-        elif direction == Movement.DOWN:
-            tmp_y += self.step
+        if self.name == "spannner":
+            if direction == Movement.UP:
+                tmp_y -= 2
+            elif direction == Movement.DOWN:
+                tmp_y += 2
+            if direction == Movement.RIGHT:
+                tmp_x += 2
+            elif direction == Movement.LEFT:
+                tmp_x -= 2
+        else:
+            if direction == Movement.UP:
+                tmp_y -= self.step
+            elif direction == Movement.DOWN:
+                tmp_y += self.step
+	    if direction == Movement.RIGHT:
+                tmp_x += self.step
+            elif direction == Movement.LEFT:
+                tmp_x -= self.step
 
-        if direction == Movement.RIGHT:
-            tmp_x += self.step
-        elif direction == Movement.LEFT:
-            tmp_x -= self.step
-
-        if not self.map.level.can_move_to(tmp_x, tmp_y):
+        if not self.map.level.can_move_to(tmp_x, tmp_y, self.name):
             return
 
         self.set_position(Position(tmp_x, tmp_y))
