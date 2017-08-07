@@ -157,15 +157,16 @@ class Player():
         return Position(self.x, self.y)
 
     def attack(self, action, direction):
+        spell_file = "assets/images/arrow.png"
         if action == Action.SPELL:
             if direction == Movement.UP:
-                spell = Spell(self, (0, -0.25))
+                spell = Spell(self, (0, -0.25), spell_file)
             elif direction == Movement.RIGHT:
-                spell = Spell(self, (0.25, 0))
+                spell = Spell(self, (0.25, 0), spell_file)
             elif direction == Movement.DOWN:
-                spell = Spell(self, (0, 0.25))
+                spell = Spell(self, (0, 0.25), spell_file)
             elif direction == Movement.LEFT:
-                spell = Spell(self, (-0.25, 0))
+                spell = Spell(self, (-0.25, 0), spell_file)
 
             # Remove first element of list if limit reached.
             if len(self.cast_spells) > self.spell_limit:
@@ -176,10 +177,11 @@ class Player():
             return
 
 class Spell():
-    def __init__(self, player, velocity, position=None, size=(0.25, 0.25), colour=(0,0,0)):
+    def __init__(self, player, velocity, file, position=None, size=(0.25, 0.25), colour=(0,0,0)):
         self.player = player
         self.size = size
         self.colour = colour
+        self.file = file
         if position == None:
             # spawn at player - additional maths centres the spell
             self.x = self.player.x + 0.5 - (size[0] / 2)
@@ -195,7 +197,11 @@ class Spell():
             self.size[0] * map_module.TILE_PIX_WIDTH,
             self.size[1] * map_module.TILE_PIX_HEIGHT
         )
-        self.rect = pygame.draw.rect(self.player.screen, self.colour, Rect(pixel_pos, pixel_size))
+
+        self.image = pygame.image.load(self.file)
+        self.image = pygame.transform.scale(self.image, (20, 20))
+        # self.image = pygame.transform.rotate(self.image, 90)
+        self.player.screen.blit(self.image, pixel_pos)
 
         # move the projectile by its velocity
         self.x += self.velo_x
