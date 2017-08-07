@@ -84,6 +84,7 @@ class GameClient():
             LevelMusic('assets/music/song.mp3')
         )
         self.map.music.load_music()
+        self.spell_image = pygame.image.load("assets/images/arrow.png")
 
     def set_state(self, new_state):
         if(new_state and new_state != self.game_state):
@@ -211,7 +212,7 @@ class GameClient():
                     self.map.render()
                     me.render()
                     for spell in me.cast_spells:
-                        spell.render()
+                        spell.render(self.spell_image)
 
                     self.players.set(self.network.node.peers())
                     # check network
@@ -249,7 +250,7 @@ class GameClient():
                         try:
                             player.render()
                             for spell in player.cast_spells:
-                                spell.render()
+                                spell.render(self.spell_image)
                                 spell.hit_target(me)
 
                         except PlayerException as e:
