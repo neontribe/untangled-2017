@@ -27,7 +27,7 @@ class PlayerException(Exception):
     pass
 
 class Player():
-    def __init__(self, screen, map, colour=(255, 255, 255)):
+    def __init__(self, screen, map, colour=(255, 255, 255), health=100,  mana=100):
         self.screen = screen
         self.map = map
         self.ready = False
@@ -54,6 +54,9 @@ class Player():
             if found:
                 break
         self.set_position(self.initial_position)
+        self.health = health
+        self.mana = mana
+        self.maxMana = mana
 
     def __raiseNoPosition(self):
         raise PlayerException({"message": "Player does not have a position set", "player": self})
@@ -159,29 +162,49 @@ class Player():
         return Position(self.x, self.y)
 
     def attack(self, action, direction,position=None):
-        if action == Action.SPELL:
-            if direction == Movement.UP:
-                spell = Spell(self, (0, -0.25),position)
-            elif direction == Movement.RIGHT:
-                spell = Spell(self, (0.25, 0),position)
-            elif direction == Movement.DOWN:
-                spell = Spell(self, (0, 0.25),position)
-            elif direction == Movement.LEFT:
-                spell = Spell(self, (-0.25, 0),position)
-            else:
-                spell = Spell(self, direction,position)
+        if self.mana > 5:
+            if action == Action.SPELL:
+                if direction == Movement.UP:
+                    spell = Spell(self, (0, -0.25),position)
+                elif direction == Movement.RIGHT:
+                    spell = Spell(self, (0.25, 0),position)
+                elif direction == Movement.DOWN:
+                    spell = Spell(self, (0, 0.25),position)
+                elif direction == Movement.LEFT:
+                    spell = Spell(self, (-0.25, 0),position)
+                else:
+                    spell = Spell(self, direction,position)
 
-            # Remove first element of list if limit reached.
-            if len(self.cast_spells) > self.spell_limit:
-                self.cast_spells[1:]
-            self.cast_spells.append(spell)
-        elif action == Action.SWIPE:
-            #TODO
-            return
+                # Remove first element of list if limit reached.
+                if len(self.cast_spells) > self.spell_limit:
+                    self.cast_spells[1:]
+                self.cast_spells.append(spell)
+                self.depleatMana(5)
+            elif action == Action.SWIPE:
+                #TODO
+                return
 
-    def remove_spell(self,spell):
+    def remove_spell(self, spell):
         self.cast_spells.remove(spell)
         return
+        
+    def depleatHealth(self, amount):
+        self.health -= amount
+        if self.health < 0:
+            self.die()
+            
+        def die(self): # Don't get confused with `def` and `death`!!! XD
+            pass
+    
+    def addMana(self, amount):
+        self.mana += amount
+        if self.mana > self.maxMana:
+            self.mana -= amount
+    
+    def depleatMana(self, amount):
+        self.mana -= amount
+        if self.mana < 0:
+            self.mana += amount
 
 class Spell():
     def __init__(self, player, velocity, position=None, size=(0.25, 0.25), colour=(0,0,0), life=100):
