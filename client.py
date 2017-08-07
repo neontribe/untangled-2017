@@ -141,16 +141,16 @@ class GameClient():
                             self.set_state(GameState.MENU)
 
                         elif event.type == pygame.locals.KEYDOWN:
-                            if event.key == pygame.locals.K_UP:
+                            if event.key == pygame.locals.K_UP or event.key == pygame.locals.K_w:
                                 me.move(Movement.UP)
                                 last_direction = Movement.UP
-                            elif event.key == pygame.locals.K_DOWN:
+                            elif event.key == pygame.locals.K_DOWN or event.key == pygame.locals.K_s:
                                 me.move(Movement.DOWN)
                                 last_direction = Movement.DOWN
-                            elif event.key == pygame.locals.K_LEFT:
+                            elif event.key == pygame.locals.K_LEFT or event.key == pygame.locals.K_a:
                                 me.move(Movement.LEFT)
                                 last_direction = Movement.LEFT
-                            elif event.key == pygame.locals.K_RIGHT:
+                            elif event.key == pygame.locals.K_RIGHT or event.key == pygame.locals.K_d:
                                 me.move(Movement.RIGHT)
                                 last_direction = Movement.RIGHT
                             elif event.key == pygame.locals.K_RETURN:

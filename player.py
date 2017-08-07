@@ -33,7 +33,7 @@ class Player():
         self.ready = False
         self.is_centre = False
         self.size = (map_module.TILE_PIX_WIDTH, map_module.TILE_PIX_HEIGHT)
-        self.step = 1
+        self.step = 2
         self.colour = colour
         self.cast_spells = []
         self.spell_limit = 50
@@ -44,6 +44,7 @@ class Player():
         self.initial_position = (0, 0)
         self.animation_ticker = 0
         self.set_position(self.initial_position)
+        self.hax = False
 
     def __raiseNoPosition(self):
         raise PlayerException({"message": "Player does not have a position set", "player": self})
@@ -127,25 +128,32 @@ class Player():
         # create collision rectangle
         self.rect = sprite.get_rect()
         self.rect.topleft = centre
-
+    
+    def set_hax(self):
+        self.hax = not self.hax
+    
     def move(self, direction):
         if not self.ready:
             self.__raiseNoPosition()
 
         tmp_x = self.x
         tmp_y = self.y
+        
+        haxBonus = 0
+        if self.hax:
+            haxBonus = 10
 
         if direction == Movement.UP:
-            tmp_y -= self.step
+            tmp_y -= self.step + haxBonus
         elif direction == Movement.DOWN:
-            tmp_y += self.step
+            tmp_y += self.step + haxBonus
 
         if direction == Movement.RIGHT:
-            tmp_x += self.step
+            tmp_x += self.step + haxBonus
         elif direction == Movement.LEFT:
-            tmp_x -= self.step
+            tmp_x -= self.step + haxBonus
 
-        if not self.map.level.can_move_to(tmp_x, tmp_y):
+        if not self.map.level.can_move_to(tmp_x, tmp_y,  self.hax):
             return
 
         self.set_position(Position(tmp_x, tmp_y))

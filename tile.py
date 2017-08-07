@@ -17,7 +17,7 @@ class TileAttribute(Enum):
 
 class TileType(Enum):
     DIRT = (2, [])
-    BRICK = (1, [ TileAttribute.COLLIDE ])
+    BRICK = (1, [TileAttribute.COLLIDE])
 
     def __init__(self, tileset_id, attributes):
         self.tileset_id = tileset_id

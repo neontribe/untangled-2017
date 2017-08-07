@@ -12,13 +12,14 @@ class Level():
     def get_tile(self, x, y):
         return self.grid[y][x]
 
-    def can_move_to(self, x, y):
-        if x < 0 or x >= self.width:
-            return False
-        elif y < 0 or y >= self.height:
-            return False
-        elif self.get_tile(x, y).has_attribute(TileAttribute.COLLIDE):
-            return False
+    def can_move_to(self, x, y,  hax):
+        if not hax:
+            if x < 0 or x >= self.width:
+                return False
+            elif y < 0 or y >= self.height:
+                return False
+            elif self.get_tile(x, y).has_attribute(TileAttribute.COLLIDE):
+                return False
         return True
 
 
