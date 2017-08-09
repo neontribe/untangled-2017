@@ -328,9 +328,7 @@ class GameClient():
                                     network_player.set_position(Position(**new_position))
 
                         except Exception as e:
-                            print(error_message + ": " + str(e))
                             import traceback
-                            print(traceback.format_exc())
                             pass
 
                     # if there are other peers we can start sending to groups.
@@ -353,7 +351,6 @@ class GameClient():
 
                         except PlayerException as e:
                             # PlayerException due to no initial position being set for that player
-                            print(error_message + ": " + str(e))
                             pass
 
                 pygame.display.update()
