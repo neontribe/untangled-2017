@@ -166,8 +166,9 @@ class GameClient():
                                 last_direction = Movement.RIGHT
                                 toMove = True
                             elif event.key == pygame.locals.K_RETURN or event.key == pygame.locals.K_SPACE :
-                                cast = True
-                                me.attack(Action.SPELL, last_direction)
+                                if me.can_fire_ability:
+                                    cast = True
+                                    me.attack(Action.SPELL, last_direction)
                                 
                             if event.key == pygame.locals.K_r and me.can_step_ability:
                                 me.step = 2
@@ -180,10 +181,12 @@ class GameClient():
                             me.can_step_ability = True
                         elif time.time() - me.steptime >3:
                             me.step = 1
+                            
                     if pygame.mouse.get_pressed()[0]:
-                        cast = True
-                        me.attack(Action.SPELL, last_direction)
-                        pygame.event.clear(pygame.locals.MOUSEBUTTONDOWN)  
+                        if me.can_fire_ability:
+                            cast = True
+                            me.attack(Action.SPELL, last_direction)
+                        pygame.event.clear(pygame.locals.MOUSEBUTTONDOWN)
                     
 
                     # https://stackoverflow.com/a/15596758/3954432
@@ -235,13 +238,21 @@ class GameClient():
 
                         # R
                         if joystick.get_button(5):
-
-                            cast = True
-                            me.attack(Action.SPELL, last_direction)
+                            if me.can_fire_ability:
+                                cast = True
+                                me.attack(Action.SPELL, last_direction)
                         if joystick.get_button (9):
                             self.set_state(GameState.MENU)
 
                         last_update = pygame.time.get_ticks()
+
+                    
+                    if cast:
+                        me.can_fire_ability = False
+                        me.firetime = time.time()
+                    
+                    if time.time() - me.firetime > 2:
+                        me.can_fire_ability = True
 
                     self.map.render()
                     me.render()
