@@ -90,7 +90,7 @@ class RenderSystem(System):
                 
                 #Scale the image
                 if img.get_size() != entity[IngameObject].size:
-                    img = pygame.transform.scale(img, entity[IngameObject].size)
+                    img = pygame.transform.smoothscale(img, entity[IngameObject].size)
                 
                 rect = Rect(screen_pos, entity[IngameObject].size)
                 rect.center = screen_pos
