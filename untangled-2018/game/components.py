@@ -172,6 +172,7 @@ class GameAction:
 class MoveRandom:
     direction: str = 'default'
     lastmove: float = 0
+    movetime: float = 0
 
 @component(networked=True)
 class Clock:

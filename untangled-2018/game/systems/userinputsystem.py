@@ -214,8 +214,9 @@ def get_position(io, hoped_vel, tmap):
     '''See if an ingame object can move its hoped distance, accounting for a tilemap; return as far as it can go'''
     # Step collision by one tile side at a time, by reducing the vector's magnitude to no higher than that of a tile's side
     hoped_dist = math.ceil((math.sqrt(hoped_vel[0]**2 + hoped_vel[1]**2)) / tmap[SpriteSheet].tile_size)
-    hoped_vel = (hoped_vel[0] / hoped_dist, hoped_vel[1] / hoped_dist)
-
+    if hoped_dist != 0:
+        hoped_vel = (hoped_vel[0] / hoped_dist, hoped_vel[1] / hoped_dist)
+    hoped_pos = io.position
     # Do every step we need to cover the whole movement vector
     for i in range(hoped_dist):
         # This is where we'd hope to be after this step
